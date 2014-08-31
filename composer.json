@@ -32,5 +32,9 @@
 	"config": {
 		"preferred-install": "dist"
 	},
-	"minimum-stability": "stable"
+	"minimum-stability": "stable",
+	"require-dev": {
+		"fzaninotto/faker": "1.3",
+                "way/generators": "1.1"
+	}
 }
