@@ -15,8 +15,7 @@ class UserRepository implements RepositoryInterface {
     );
     
     public function all() {
-        $t = new UserTransformer;
-        return $t->transformCollection(User::all()->toArray());
+        return UserTransformer::transformer(User::all()->toArray());
     }
     
     public function getRules() {
