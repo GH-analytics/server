@@ -13,7 +13,7 @@ interface RepositoryInterface {
 
     public function get($id);
 
-    public function validate($data);
+    public function validate($data, $validation);
 
     public function create($data);
 

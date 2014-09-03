@@ -25,7 +25,19 @@ class UserController extends \BaseController {
      */
     public function store()
     {
-            //
+        $valid = $this->user->validate(Input::all(), $this->user->getRules());
+        
+        if(is_null($valid)) {
+            $created = $this->user->create(Input::all());
+            
+            if(is_null($created)) {
+                
+            } else {
+                return "this bad.";
+            }
+        } else {
+            return $valid;
+        }
     }
 
 

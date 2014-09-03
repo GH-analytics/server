@@ -17,7 +17,7 @@ trait TransformerTrait {
      * @param array $data
      * @return type
      */
-    public static function transformer(array $data) {
+    public static function _(array $data) {
         $class = __CLASS__;
         $transformerClass = new $class;
         return $transformerClass->transformCollection($data);
