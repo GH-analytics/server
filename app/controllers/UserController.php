@@ -1,12 +1,6 @@
 <?php
 
-use Analytics\Repository\UserRepository;
-
-class UserController extends \BaseController {
-    
-    public function __construct(UserRepository $user) {
-        $this->user = $user;
-    }
+class UserController extends ApiController {
 
     /**
      * Display a listing of the resource.
@@ -15,7 +9,7 @@ class UserController extends \BaseController {
      */
     public function index()
     {
-        return $this->user->all();
+        return $this->respond(User::_(User::all()->toArray()));
     }
 
     /**
@@ -25,13 +19,13 @@ class UserController extends \BaseController {
      */
     public function store()
     {
-        $valid = $this->user->validate(Input::all(), $this->user->getRules());
+        $valid = User::isValid();
         
-        if(is_null($valid)) {
+        if($valid === true) {
             $created = $this->user->create(Input::all());
             
             if(is_null($created)) {
-                
+                return $this->respond(array("message" => "User Created"));
             } else {
                 return "this bad.";
             }
