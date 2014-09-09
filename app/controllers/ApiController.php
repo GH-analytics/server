@@ -47,9 +47,35 @@ class ApiController extends \BaseController {
             "error" => $this->getStatusCode()
         ));
     }
-       
+    
+    /**
+     * 404 Error Code
+     * 
+     * @param type $message
+     * @return type
+     */
     public function respondNotFound($message = "Not Found") {
         return $this->setStatusCode(404)->respondWithError($message);
+    }
+
+    /**
+     * 401 Error Code
+     * 
+     * @param type $message
+     * @return type
+     */
+    public function respondUnauthorized($message = "You do not have access") {
+        return $this->setStatusCode(401)->respondWithError($message);
+    }
+    
+    /**
+     * 409 Error Code
+     * 
+     * @param type $message
+     * @return type
+     */
+    public function respondConflict($message = "Please pass in valid JSON") {
+        return $this->setStatusCode(409)->respondWithError($message);
     }
 }
 

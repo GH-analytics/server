@@ -31,7 +31,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface, Trans
          *
          * @var array
          */
-        protected $fillable = array('first_name', 'last_name', 'email');
+        protected $fillable = array('firstname', 'lastname', 'email', 'password');
         
         /**
          * User validation rules
@@ -41,7 +41,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface, Trans
         public static $rules = array(
             'first' => 'required|alpha|max:20',
             'last' => 'required|alpha|max:20',
-            'email' => 'required|email|max:100'
+            'email' => 'required|email|max:100',
+            'password' => 'min:8'
         );
     
         /**
@@ -65,11 +66,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface, Trans
          * 
          * @param type $data
          */
-        public function isValid($data) {
+        public static function isValid($data) {
             
-            $validation = Validation::make($data, static::$rules);
+            $validation = Validator::make($data, static::$rules);
             
-            if( $validation->passes ) {
+            if( $validation->passes() ) {
                 return true;
             } else {
                 return $validation->messages();

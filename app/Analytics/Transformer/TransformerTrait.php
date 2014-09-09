@@ -22,4 +22,17 @@ trait TransformerTrait {
         $transformerClass = new $class;
         return $transformerClass->transformCollection($data);
     }
+    
+    /**
+     * Used in cases where you would just like to return one
+     * array. Such as for /user/$id.
+     * 
+     * @param array $data
+     * @return type
+     */
+    public static function __(array $data) {
+        $class = __CLASS__;
+        $transformerClass = new $class;
+        return $transformerClass->transform($data);
+    }
 }
