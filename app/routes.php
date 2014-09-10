@@ -11,4 +11,9 @@
 |
 */
 
+// Auth Routes
+Route::post('login', 'AuthController@login');
+Route::get('logout', 'AuthController@logout');
+Route::get('check', 'AuthController@check');
+
 Route::resource('user', 'UserController');

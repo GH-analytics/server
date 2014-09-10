@@ -107,6 +107,7 @@ class UserController extends ApiController {
         $user = User::find($id);
         
         if(is_object($user)) {
+            
             try{
                 User::destroy($id);
             } catch(Exception $e) {
