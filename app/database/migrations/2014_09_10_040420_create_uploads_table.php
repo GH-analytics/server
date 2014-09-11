@@ -20,6 +20,8 @@ class CreateUploadsTable extends Migration {
                 $table->decimal('filesize');
                 $table->boolean('synced');
                 $table->timestamps();
+                
+                $table->foreign('user_id')->references('id')->on('users');
             });
 	}
 

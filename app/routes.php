@@ -17,3 +17,4 @@ Route::get('logout', 'AuthController@logout');
 Route::get('check', 'AuthController@check');
 
 Route::resource('user', 'UserController');
+Route::resource('upload', 'UploadController');

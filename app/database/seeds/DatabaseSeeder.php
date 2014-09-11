@@ -13,8 +13,10 @@ class DatabaseSeeder extends Seeder {
             
             // Run seeders if developing
             if (app()->env == "development") {
-                User::truncate();
+                
                 $this->call('UsersTableSeeder');
+                
+                $this->call('UploadsTableSeeder');
             }
 	}
 

@@ -1,6 +1,11 @@
 <?php
 
-class UploadController extends \BaseController {
+/**
+ * This route should only be accessed in the case
+ * where the user has already logged into the system
+ * and has a session id set.
+ */
+class UploadController extends ApiController {
 
 	/**
 	 * Display a listing of the resource.
@@ -9,17 +14,20 @@ class UploadController extends \BaseController {
 	 */
 	public function index()
 	{
-		//
+            $uploads = Upload::where('user_id', '=', Session::get('id'))->get();
+            
+            return $this->respond(Upload::_($uploads->toArray()));
 	}
 
 	/**
 	 * Store a newly created resource in storage.
+         * This should be used only to upload files.
 	 *
 	 * @return Response
 	 */
 	public function store()
 	{
-		//
+            
 	}
 
 

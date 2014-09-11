@@ -1,37 +1,32 @@
 <?php
 
-use Illuminate\Auth\UserTrait;
-use Illuminate\Auth\UserInterface;
-use Illuminate\Auth\Reminders\RemindableTrait;
-use Illuminate\Auth\Reminders\RemindableInterface;
-
 use Analytics\Transformer\TransformerInterface;
 use Analytics\Transformer\TransformerTrait;
 
-class User extends Eloquent implements UserInterface, RemindableInterface, TransformerInterface {
+class Upload extends Eloquent implements TransformerInterface {
 
-	use UserTrait, RemindableTrait, TransformerTrait;
+	use TransformerTrait;
 
 	/**
 	 * The database table used by the model.
 	 *
 	 * @var string
 	 */
-	protected $table = 'users';
+	protected $table = 'uploads';
 
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('password', 'remember_token');
+	protected $hidden = array( );
         
         /**
          * Values that are allowed to be mass assigned.
          *
          * @var array
          */
-        protected $fillable = array('firstname', 'lastname', 'email', 'password');
+        protected $fillable = array('user_id', 'filename', 'filesize');
         
         /**
          * User validation rules
@@ -39,10 +34,9 @@ class User extends Eloquent implements UserInterface, RemindableInterface, Trans
          * @var type 
          */
         public static $rules = array(
-            'first' => 'required|alpha|max:20',
-            'last' => 'required|alpha|max:20',
-            'email' => 'required|email|max:100',
-            'password' => 'min:8'
+            'userid' => 'required|integer',
+            'filename' => 'required|alpha|max:250',
+            'filesize' => 'required|numeric'
         );
     
         /**
@@ -54,9 +48,10 @@ class User extends Eloquent implements UserInterface, RemindableInterface, Trans
         public function transform(array $data) {
             return array(
                 'id' => $data['id'],
-                'first' => $data['firstname'],
-                'last' => $data['lastname'],
-                'email' => $data['email'],
+                'userid' => $data['user_id'],
+                'filename' => $data['filename'],
+                'filesize' => $data['filesize'],
+                'synced' => $data['synced'],
                 'created' => $data['created_at'],
                 'updated' => $data['updated_at']
             );
