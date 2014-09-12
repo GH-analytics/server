@@ -26,7 +26,7 @@ class Upload extends Eloquent implements TransformerInterface {
          *
          * @var array
          */
-        protected $fillable = array('user_id', 'filename', 'filesize');
+        protected $fillable = array('user_id', 'filename', 'filesize', 'synced');
         
         /**
          * User validation rules

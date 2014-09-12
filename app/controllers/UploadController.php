@@ -27,6 +27,32 @@ class UploadController extends ApiController {
 	 */
 	public function store()
 	{
+            // Make sure we are getting the proper file.
+            if (Input::file('file')->isValid()){
+                $extension = Input::file('file')->getClientOriginalExtension();
+                $path = Input::file('file')->getRealPath();
+                $size = Input::file('file')->getSize();
+                
+
+                if($extension == "json"){
+                    
+                    Input::file('file')->move(
+                        storage_path() . "/uploads",
+                        $file = hash_file('sha256', $path) . ".json"
+                    );
+                    
+                    $upload = Upload::create(array(
+                        "user_id" => Session::get('id'),
+                        "filename" => $file,
+                        "filesize" => $size,
+                        "synced" => 0
+                    ));
+                    
+                    return $this->respond(Upload::__($upload->toArray()));
+                }
+            } else {
+                return $this->respondConflict("File is not valid");
+            }
             
 	}
 
@@ -39,7 +65,10 @@ class UploadController extends ApiController {
 	 */
 	public function show($id)
 	{
-		//
+            // Display specific upload.
+            $uploads = Upload::whereRaw('user_id = ' . Session::get('id') . 'and id = ' . $id)->first();
+            
+            return $this->respond($uploads);
 	}
 
 	/**
@@ -50,7 +79,7 @@ class UploadController extends ApiController {
 	 */
 	public function update($id)
 	{
-		//
+            
 	}
 
 
@@ -62,7 +91,20 @@ class UploadController extends ApiController {
 	 */
 	public function destroy($id)
 	{
-		//
+            $upload = Upload::find($id);
+        
+            if(is_object($upload)) {
+
+                try{
+                    Upload::destroy($id);
+                } catch(Exception $e) {
+                    return $this->respondConflict("Upload constraint violation on delete");
+                }
+
+                return $this->respond(array("message" => "Upload was deleted"));
+            } else {
+                return $this->respondNotFound("Upload $id does not exist");
+            }
 	}
 
 

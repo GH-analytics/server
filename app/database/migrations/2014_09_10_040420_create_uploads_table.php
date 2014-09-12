@@ -17,7 +17,7 @@ class CreateUploadsTable extends Migration {
                 $table->increments('id');
                 $table->unsignedInteger('user_id');
                 $table->string('filename', 250);
-                $table->decimal('filesize');
+                $table->string('filesize', 250);
                 $table->boolean('synced');
                 $table->timestamps();
                 
