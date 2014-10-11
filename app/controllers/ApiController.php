@@ -3,7 +3,7 @@
 
 use Illuminate\Support\Facades\Response;
 
-class ApiController extends \BaseController {
+class ApiController extends Controller {
     
     protected $statusCode = 200;
     
