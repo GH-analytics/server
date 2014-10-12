@@ -14,11 +14,12 @@ class CreateMessagesTable extends Migration {
 	{
 		Schema::create('messages', function(Blueprint $table){
             $table->increments('id');
+            $table->unsignedInteger('participant_id');
             $table->string('type');
             $table->string('message', 2000);
             $table->timestamp('timestamp');
 
-
+            $table->foreign('participant_id')->references('id')->on('participants');
         });
 	}
 

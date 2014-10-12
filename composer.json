@@ -5,11 +5,12 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.2.*",
-                "pda/pheanstalk": "~2.0"
+        "pda/pheanstalk": "~2.0",
+        "mschuett/jmem": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
-                        "app/Analytics",
+            "app/Analytics",
 			"app/commands",
 			"app/controllers",
 			"app/models",
@@ -37,6 +38,6 @@
 	"minimum-stability": "stable",
 	"require-dev": {
 		"fzaninotto/faker": "1.3",
-                "way/generators": "1.1"
+        "way/generators": "1.1"
 	}
 }
