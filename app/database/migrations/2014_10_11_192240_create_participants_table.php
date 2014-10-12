@@ -17,10 +17,7 @@ class CreateParticipantsTable extends Migration {
             // Since name is not always available this can sometime
             // be a unique ID so it's named identifier.
             $table->string('identifier');
-            $table->string('gaia_id');
-            $table->string('chat_id');
-            $table->string('status');
-
+            $table->string('gaia_id')->unique();
         });
 	}
 
@@ -31,7 +28,7 @@ class CreateParticipantsTable extends Migration {
 	 */
 	public function down()
 	{
-		//
+		Schema::drop('participants');
 	}
 
 }
