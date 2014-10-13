@@ -37,7 +37,12 @@ class SyncHangouts extends Command {
 	 */
 	public function fire()
 	{
-		//
+            // get command line argument for file name and place it
+            // should be located in for processing.
+            $file = storage_path() . '/uploads/' . $this->argument('filename');
+            
+            // Pass to Hangouts class to parse the data.
+            new Analytics\Hangout\Hangouts($file);
 	}
 
 	/**
@@ -48,19 +53,7 @@ class SyncHangouts extends Command {
 	protected function getArguments()
 	{
 		return array(
-			array('example', InputArgument::REQUIRED, 'An example argument.'),
-		);
-	}
-
-	/**
-	 * Get the console command options.
-	 *
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return array(
-			array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
+			array('filename', InputArgument::REQUIRED, 'Hangouts.json file to be parsed.'),
 		);
 	}
 
