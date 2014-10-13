@@ -76,5 +76,9 @@ class Participant extends Eloquent implements TransformerInterface {
             }
             
         }
+        
+        public function conversations() {
+            return $this->belongsToMany('Conversation');
+        }
 
 }

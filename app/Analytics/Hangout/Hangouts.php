@@ -46,7 +46,7 @@ class Hangouts {
             'conversation_id' => $json['conversation_id']['id']
         ));
         
-        return $test->id;
+        return $test;
     }
     
     /**
@@ -73,6 +73,10 @@ class Hangouts {
                     'gaia_id' => $participant['id']['gaia_id']
                 ));
             }
+            
+            // Could be optimized to save all relations as once.
+            // Shouldn't be an issue though for now.
+            $id->participants()->save($exits);
             
             $holder[] = array(
                 'id' => $exits->id,
