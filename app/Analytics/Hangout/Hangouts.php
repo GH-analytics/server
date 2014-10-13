@@ -2,6 +2,7 @@
 
 use Jmem;
 use Conversation;
+use Participant;
 
 
 class Hangouts {
@@ -20,35 +21,71 @@ class Hangouts {
         $gen = new Jmem\JsonLoader($file, "conversation_state");
 
         foreach($gen->parse()->start() as $obj) {
-
+            // Get JSON object belonging to this conversation
             $json = json_decode($obj->stream, true);
-            
-            $this->conversation($json);
-
+            // Place the conversation in the database
+            $id = $this->conversation($json);
+            // Tie all participants to conversation
+            $participants = $this->participants($json, $id);
+            // Tie all messaged to participants and convo id's
+            $this->messages($json, $id, $participants);
         }
         
     }
     
     /**
-     * Place conversation in database.
+     * Place conversation in database. Return the id so
+     * the participants can be properly tied together.
      * 
-     * @param type $json
+     * @param array $json
+     * @return int
      */
     private function conversation($json) {
         
-        Conversation::create(array(
+        $test = Conversation::create(array(
             'conversation_id' => $json['conversation_id']['id']
         ));
         
+        return $test->id;
     }
     
     /**
      * Place all participants in the database.
+     * Relate them to the proper conversation.
+     * Check to never add the same person twice.
      * 
-     * @param type $json
+     * @param array $json
+     * @param int $id
      */
-    private function participants($json) {
+    private function participants($json, $id) {
         
+        $participants = $json['conversation_state']['conversation']['participant_data'];
+        // Hold all participants and id's in memory for when inserting chat history to db.
+        $holder = array();
+        
+        foreach($participants as $participant) {
+            
+            $exits = Participant::where('gaia_id', '=', $participant['id']['gaia_id'])->first();
+            
+            if(!is_object($exits)){
+                $exits = Participant::create(array(
+                    'identifier' => $participant['fallback_name'],
+                    'gaia_id' => $participant['id']['gaia_id']
+                ));
+            }
+            
+            $holder[] = array(
+                'id' => $exits->id,
+                'gaia_id' => $exits->gaia_id
+            );
+            
+        }
+        
+        return $holder;
+    }
+    
+    private function messages($json, $id, $participants) {
+        // TODO: Impliment this.
     }
     
 }

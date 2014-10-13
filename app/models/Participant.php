@@ -3,7 +3,7 @@
 use Analytics\Transformer\TransformerInterface;
 use Analytics\Transformer\TransformerTrait;
 
-class Conversation extends Eloquent implements TransformerInterface {
+class Participant extends Eloquent implements TransformerInterface {
 
 	use TransformerTrait;
 
@@ -12,7 +12,7 @@ class Conversation extends Eloquent implements TransformerInterface {
 	 *
 	 * @var string
 	 */
-	protected $table = 'conversations';
+	protected $table = 'participants';
 
 	/**
 	 * The attributes excluded from the model's JSON form.
@@ -26,7 +26,7 @@ class Conversation extends Eloquent implements TransformerInterface {
          *
          * @var array
          */
-        protected $fillable = array('conversation_id');
+        protected $fillable = array('identifier', 'gaia_id');
         
         /**
          * Do not try to insert timestamps into this table
@@ -42,7 +42,8 @@ class Conversation extends Eloquent implements TransformerInterface {
          * @var type 
          */
         public static $rules = array(
-            'conversationid' => 'required',
+            'identifier' => '',
+            'gaiaid' => 'required'
         );
     
         /**
@@ -54,7 +55,8 @@ class Conversation extends Eloquent implements TransformerInterface {
         public function transform(array $data) {
             return array(
                 'id' => $data['id'],
-                'conversationid' => $data['conversation_id']
+                'identifier' => $data['identifier'],
+                'gaiaid' => $data['gaia_id']
             );
         }
         
