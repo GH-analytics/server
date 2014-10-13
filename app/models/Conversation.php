@@ -29,6 +29,14 @@ class Conversation extends Eloquent implements TransformerInterface {
         protected $fillable = array('conversation_id');
         
         /**
+         * Do not try to insert timestamps into this table
+         *
+         * @var type 
+         */
+        public $timestamps = false;
+
+
+        /**
          * User validation rules
          *
          * @var type 

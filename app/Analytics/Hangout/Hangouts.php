@@ -1,6 +1,7 @@
 <?php namespace Analytics\Hangout;
 
 use Jmem;
+use Conversation;
 
 
 class Hangouts {
@@ -35,7 +36,9 @@ class Hangouts {
      */
     private function conversation($json) {
         
-        var_dump($json['conversation_id']['id']);die;
+        Conversation::create(array(
+            'conversation_id' => $json['conversation_id']['id']
+        ));
         
     }
     
