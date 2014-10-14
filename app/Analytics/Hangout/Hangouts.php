@@ -3,7 +3,9 @@
 use Jmem;
 use Conversation;
 use Participant;
-
+use Message;
+use Illuminate\Support\Facades\DB;
+use Whoops\Example\Exception;
 
 class Hangouts {
     
@@ -78,18 +80,46 @@ class Hangouts {
             // Shouldn't be an issue though for now.
             $id->participants()->save($exits);
             
-            $holder[] = array(
-                'id' => $exits->id,
-                'gaia_id' => $exits->gaia_id
-            );
-            
+            $holder[$exits->gaia_id] = $exits;
         }
         
         return $holder;
     }
     
     private function messages($json, $id, $participants) {
-        // TODO: Impliment this.
+        // Get the array of messages.
+        $messages = $json['conversation_state']['event'];
+
+            foreach($messages as $message) {
+                // Ignote attachments for now. Can't get much useful info from them anyway.
+                if(isset($message['chat_message']) && isset($message['chat_message']['message_content']['segment'])){
+                    foreach($message['chat_message']['message_content']['segment'] as $part) {
+                        // Skip if all that we are looping over is a line break
+                        if(!isset($participants[$message['sender_id']['gaia_id']])){
+                            // Runs in the case someone was in the chat but now has left...
+                            $participant = Participant::where('gaia_id', '=', $message['sender_id']['gaia_id'])->first();
+                            if(!is_object($participant)) {
+                                $participant = Participant::create(array(
+                                    'identifier' => '',
+                                    'gaia_id' => $message['sender_id']['gaia_id']
+                                ));
+                            }
+                            $id->participants()->save($participant);
+                            $participants[$participant->gaia_id] = $participant;
+                        }
+
+                        if(isset($part['text'])){
+                            $created = Message::create(array(
+                                'conversation_id' => $id->id,
+                                'participant_id' => $participants[$message['sender_id']['gaia_id']]->id,
+                                'type' => $part['type'],
+                                'message' => $part['text'],
+                                'timestamp' => $message['timestamp']
+                            ));
+                        }
+                    }
+                }
+            }
     }
     
 }

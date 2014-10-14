@@ -3,7 +3,7 @@
 use Analytics\Transformer\TransformerInterface;
 use Analytics\Transformer\TransformerTrait;
 
-class Conversation extends Eloquent implements TransformerInterface {
+class Message extends Eloquent implements TransformerInterface {
 
 	use TransformerTrait;
 
@@ -12,7 +12,7 @@ class Conversation extends Eloquent implements TransformerInterface {
 	 *
 	 * @var string
 	 */
-	protected $table = 'conversations';
+	protected $table = 'messages';
 
 	/**
 	 * The attributes excluded from the model's JSON form.
@@ -26,7 +26,7 @@ class Conversation extends Eloquent implements TransformerInterface {
          *
          * @var array
          */
-        protected $fillable = array('conversation_id');
+        protected $fillable = array('participant_id', 'conversation_id', 'type', 'message', 'timestamp');
         
         /**
          * Do not try to insert timestamps into this table
@@ -43,6 +43,10 @@ class Conversation extends Eloquent implements TransformerInterface {
          */
         public static $rules = array(
             'conversationid' => 'required',
+            'participantid' => 'required',
+            'type' => 'required',
+            'message' => 'required',
+            'timestamp' => 'required'
         );
     
         /**
@@ -54,7 +58,11 @@ class Conversation extends Eloquent implements TransformerInterface {
         public function transform(array $data) {
             return array(
                 'id' => $data['id'],
-                'conversationid' => $data['conversation_id']
+                'conversationid' => $data['conversation_id'],
+                'participantid' => $data['participant_id'],
+                'type' => $data['type'],
+                'message' => $data['message'],
+                'timestamp' => $data['timestamp']
             );
         }
         
@@ -75,13 +83,12 @@ class Conversation extends Eloquent implements TransformerInterface {
             
         }
         
-        public function participants() {
-            return $this->belongsToMany('Participant');
+        public function participant() {
+            return $this->hasOne('Participant');
         }
 
-        public function messages()
-        {
-            return $this->hasMany('Message');
+        public function conversation() {
+            return $this->hasOne('Conversation');
         }
 
 }
