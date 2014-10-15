@@ -16,7 +16,13 @@ class SyncController extends ApiController {
 
         $base = base_path();
 
-        exec("php $base/artisan sync-hangouts $file > /dev/null 2>&1");
+        $cmd = "php $base/artisan sync-hangouts $file";
+
+        $outputfile = "/dev/null";
+
+        $pidfile = "/tmp/check.pid";
+
+        exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
 
         return $this->respond('{"message": "Syncing for Hangouts.json has begun."}');
         
