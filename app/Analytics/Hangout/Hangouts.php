@@ -4,6 +4,7 @@ use Jmem;
 use Conversation;
 use Participant;
 use Message;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 use Whoops\Example\Exception;
 
@@ -23,6 +24,7 @@ class Hangouts {
         $gen = new Jmem\JsonLoader($file, "conversation_state");
 
         foreach($gen->parse()->start() as $obj) {
+            echo $obj->number . PHP_EOL;
             // Get JSON object belonging to this conversation
             $json = json_decode($obj->stream, true);
             // Place the conversation in the database
@@ -108,13 +110,13 @@ class Hangouts {
                             $participants[$participant->gaia_id] = $participant;
                         }
 
-                        if(isset($part['text'])){
-                            $created = Message::create(array(
+                        if(isset($part['text']) && strlen(trim($part['text'])) != 0){
+                            Message::create(array(
                                 'conversation_id' => $id->id,
                                 'participant_id' => $participants[$message['sender_id']['gaia_id']]->id,
                                 'type' => $part['type'],
                                 'message' => $part['text'],
-                                'timestamp' => $message['timestamp']
+                                'timestamp' => date('Y-m-d H:i:s', $message['timestamp']/1000000)
                             ));
                         }
                     }
