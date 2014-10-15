@@ -16,5 +16,9 @@ Route::post('login', 'AuthController@login');
 Route::get('logout', 'AuthController@logout');
 Route::get('check', 'AuthController@check');
 
+// Run Hangouts.json Sync
+Route::get('sync/{id}', 'SyncController@sync');
+
+// CRUD controllers
 Route::resource('user', 'UserController');
 Route::resource('upload', 'UploadController');

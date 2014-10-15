@@ -4,9 +4,6 @@ use Jmem;
 use Conversation;
 use Participant;
 use Message;
-use DateTime;
-use Illuminate\Support\Facades\DB;
-use Whoops\Example\Exception;
 
 class Hangouts {
     
@@ -24,7 +21,6 @@ class Hangouts {
         $gen = new Jmem\JsonLoader($file, "conversation_state");
 
         foreach($gen->parse()->start() as $obj) {
-            echo $obj->number . PHP_EOL;
             // Get JSON object belonging to this conversation
             $json = json_decode($obj->stream, true);
             // Place the conversation in the database
@@ -66,7 +62,8 @@ class Hangouts {
         $participants = $json['conversation_state']['conversation']['participant_data'];
         // Hold all participants and id's in memory for when inserting chat history to db.
         $holder = array();
-        
+        // Need to check for case where participant was added bellow and does not have a fall
+        // back name currently set for them.
         foreach($participants as $participant) {
             
             $exits = Participant::where('gaia_id', '=', $participant['id']['gaia_id'])->first();
