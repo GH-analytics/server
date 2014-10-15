@@ -9,6 +9,8 @@ class SyncController extends ApiController {
      * @return type
      */
     public function sync($id) {
+        // Check that we are not already running this process.
+        if($this->pid()) return $this->respond('{"message": "Sync already in progress"}');
 
         $upload = Upload::whereRaw('user_id = ' . Session::get('id') . ' and id = ' . $id)->first();
 
@@ -39,6 +41,35 @@ class SyncController extends ApiController {
         $count = DB::table('messages')->count();
         return $this->respond('{messages: "' . $count . '"}');
 
+    }
+
+    /**
+     * See if the PID saved to check.pid is still
+     * running or has stopped.
+     *
+     * @return type
+     */
+    public function checkpid() {
+
+        if($this->pid()){
+            return $this->respond('{"message": "Process is running..."}');
+        }
+
+        return $this->respond('{"message": "Process has stopped..."}');
+
+    }
+
+    private function pid() {
+
+        try{
+            $file = file_get_contents('/tmp/check.pid');
+            $result = shell_exec(sprintf("ps %d", $file));
+            if( count(preg_split("/\n/", $result)) > 2){
+                return true;
+            }
+        }catch(Exception $e){}
+
+        return false;
     }
 
 }
