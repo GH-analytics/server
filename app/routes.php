@@ -18,7 +18,7 @@ Route::get('check', 'AuthController@check');
 
 // Run Hangouts.json Sync
 Route::get('sync/{id}', 'SyncController@sync');
-Route::get('check', 'SyncController@check');
+Route::get('check-sync', 'SyncController@check');
 Route::get('checkpid', 'SyncController@checkpid');
 
 // CRUD controllers
@@ -26,3 +26,6 @@ Route::resource('user', 'UserController');
 Route::resource('upload', 'UploadController');
 Route::resource('conversation', 'ConversationController');
 Route::resource('message', 'MessageController');
+
+// Extending Controllers.
+Route::get('message-by-conv/{id}', 'MessageController@messageByConversation');

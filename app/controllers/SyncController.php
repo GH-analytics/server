@@ -12,6 +12,14 @@ class SyncController extends ApiController {
         // Check that we are not already running this process.
         if($this->pid()) return $this->respond('{"message": "Sync already in progress"}');
 
+        // Clean all tables.
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('conversation_participant')->delete();
+        DB::table('participants')->delete();
+        DB::table('messages')->delete();
+        DB::table('conversations')->delete();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         $upload = Upload::whereRaw('user_id = ' . Session::get('id') . ' and id = ' . $id)->first();
 
         $file = $upload->filename;
@@ -25,6 +33,10 @@ class SyncController extends ApiController {
         $pidfile = "/tmp/check.pid";
 
         // Start command but don't wait for this to finish!
+        try{
+            unlink($pidfile);
+        }catch (Exception $e){}
+
         exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
 
         return $this->respond('{"message": "Syncing for Hangouts.json has begun."}');

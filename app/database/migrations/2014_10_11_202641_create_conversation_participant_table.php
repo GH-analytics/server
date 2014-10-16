@@ -16,8 +16,8 @@ class CreateConversationParticipantTable extends Migration {
             $table->unsignedInteger('conversation_id');
             $table->unsignedInteger('participant_id');
 
-            $table->foreign('conversation_id')->references('id')->on('conversations');
-            $table->foreign('participant_id')->references('id')->on('participants');
+            $table->foreign('conversation_id')->references('id')->on('conversations')->onDelete('cascade');
+            $table->foreign('participant_id')->references('id')->on('participants')->onDelete('cascade');
         });
 	}
 

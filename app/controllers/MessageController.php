@@ -4,6 +4,8 @@ class MessageController extends ApiController {
 
     /**
      * Display a listing of the resource.
+     * Only bring back 50 at a time so we don't
+     * kill the server.
      *
      * @return Response
      */
@@ -21,7 +23,6 @@ class MessageController extends ApiController {
     {
         // TODO: Currently you are not allowed to add new ones.
     }
-
 
     /**
      * Display the specified resource.
@@ -60,6 +61,15 @@ class MessageController extends ApiController {
     public function destroy($id)
     {
         // TODO: You are not allowed to delete an item currently.
+    }
+
+    /**
+     * Get the messages passed on the passed in conversation id
+     *
+     * @param $id
+     */
+    public function messageByConversation($id) {
+        return $this->respond(Message::_(Message::where('conversation_id', '=', $id)->paginate(50)->toArray()['data']));
     }
 
 }
