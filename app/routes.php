@@ -24,3 +24,5 @@ Route::get('checkpid', 'SyncController@checkpid');
 // CRUD controllers
 Route::resource('user', 'UserController');
 Route::resource('upload', 'UploadController');
+Route::resource('conversation', 'ConversationController');
+Route::resource('message', 'MessageController');
