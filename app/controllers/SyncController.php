@@ -22,24 +22,29 @@ class SyncController extends ApiController {
 
         $upload = Upload::whereRaw('user_id = ' . Session::get('id') . ' and id = ' . $id)->first();
 
-        $file = $upload->filename;
+        if(is_object($upload)){
+            $file = $upload->filename;
 
-        $base = base_path();
+            $base = base_path();
 
-        $cmd = "php $base/artisan sync-hangouts $file";
+            $cmd = "php $base/artisan sync-hangouts $file";
 
-        $outputfile = "/dev/null";
+            $outputfile = "/dev/null";
 
-        $pidfile = "/tmp/check.pid";
+            $pidfile = "/tmp/check.pid";
 
-        // Start command but don't wait for this to finish!
-        try{
-            unlink($pidfile);
-        }catch (Exception $e){}
+            // Start command but don't wait for this to finish!
+            try{
+                unlink($pidfile);
+            }catch (Exception $e){}
 
-        exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
+            exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
 
-        return $this->respond('{"message": "Syncing for Hangouts.json has begun."}');
+            return $this->respond('{"message": "Syncing for Hangouts.json has begun."}');
+        } else {
+            return $this->respond('{"message": "Could not find a record for the data you entered."}');
+        }
+        
         
     }
 

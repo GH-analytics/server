@@ -29,3 +29,6 @@ Route::resource('message', 'MessageController');
 
 // Extending Controllers.
 Route::get('message-by-conv/{id}', 'MessageController@messageByConversation');
+
+// Reporting Controllers
+Route::get("user-word-cloud/{participant_id}/{date_start?}/{date_end?}", "ReportingController@userWordCloud");
