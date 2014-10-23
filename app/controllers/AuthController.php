@@ -14,7 +14,7 @@ class AuthController extends ApiController {
         
         // Check if this user is in the database.
         if(!is_object($user)) {
-            $this->respondNotFound("This user is not in the database.");
+            return $this->respondNotFound("This user is not in the database.");
         }
         
         if (Auth::attempt(array(
@@ -29,7 +29,7 @@ class AuthController extends ApiController {
             
         }
         
-        $this->respondUnauthorized("Your password does not match.");
+        return $this->respondUnauthorized("Your password does not match.");
     }
     
     public function logout() {
