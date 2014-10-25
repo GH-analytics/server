@@ -50,10 +50,9 @@ class UploadController extends ApiController {
                     
                     return $this->respond(Upload::__($upload->toArray()));
                 }
-            } else {
-                return $this->respondConflict("File is not valid");
             }
             
+            return $this->respondConflict("File is not valid");
 	}
 
 
