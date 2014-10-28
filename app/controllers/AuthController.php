@@ -27,9 +27,11 @@ class AuthController extends ApiController {
             Session::put('last', $user->lastname);
             Session::put('email', $user->email);
             
+            return $this->respond(array("message" => "You have been logged in."));
+        } else {
+            return $this->respondUnauthorized("Your password does not match.");
         }
         
-        return $this->respondUnauthorized("Your password does not match.");
     }
     
     public function logout() {
