@@ -10,8 +10,11 @@ class SyncController extends ApiController {
      */
     public function sync($id) {
         // Check that we are not already running this process.
-        if($this->pid()) return $this->respond('{"message": "Sync already in progress"}');
-
+        if($this->pid()) return $this->respond(["message" => "Sync is already in progress."]);
+        
+        // Check that the user is logged into the system
+        if(empty(Session::get('id'))) return $this->respond(["message" => "You are not logged into the system."]);
+        
         // Clean all tables.
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB::table('conversation_participant')->delete();
