@@ -40,9 +40,9 @@ class SyncController extends ApiController {
 
             exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
 
-            return $this->respond('{"message": "Syncing for Hangouts.json has begun."}');
+            return $this->respond(["message" => "Syncing for Hangouts.json has begun"]);
         } else {
-            return $this->respond('{"message": "Could not find a record for the data you entered."}');
+            return $this->respond(["message" => "Could not find a record for the data that you entered"]);
         }
         
         
@@ -56,7 +56,7 @@ class SyncController extends ApiController {
     public function check() {
 
         $count = DB::table('messages')->count();
-        return $this->respond('{messages: "' . $count . '"}');
+        return $this->respond(["message" => $count]);
 
     }
 
@@ -69,10 +69,10 @@ class SyncController extends ApiController {
     public function checkpid() {
 
         if($this->pid()){
-            return $this->respond('{"message": "Process is running..."}');
+            return $this->respond(["message" => "process is running..."]);
         }
 
-        return $this->respond('{"message": "Process has stopped..."}');
+        return $this->respond(["message" => "process has stopped..."]);
 
     }
 

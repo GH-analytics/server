@@ -8,8 +8,6 @@ class ReportingController extends ApiController {
      * @param $id
      */
     public function userWordCloud($participant_id, $start_date = null, $end_date = null) {
-        set_time_limit(200);
-        
         $stats = []; // make an empty array to store data in.
         $skip = 0; // How many rows to skip before getting new data
         $take = 1000; // How many to get at a time
